@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    container_name: postgres2
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - '7654:5432'
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nest-docker-postgres-task
+    environment:
+      - PORT=3010
+    ports:
+      - '3010:3010'
+    depends_on:
+      - db
+    volumes:
+      - ./src:/app/src
